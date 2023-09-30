@@ -28,6 +28,7 @@ def sample(logits, T=0.8, top_p=0.8, top_k=200):
 
 def generate(gpt_encoder, model, input_text, max_length=50):
     input_tokens = gpt_encoder.encode(input_text)
+    print(input_text, end="", flush=True)
     n_past = 0
     ret = input_text
     for i in range(max_length):
@@ -38,7 +39,7 @@ def generate(gpt_encoder, model, input_text, max_length=50):
         t = gpt_encoder.decode([next_token])
         if t == "<|endoftext|>":
             break
-        ret += "" + t
+        print(t, end="", flush=True)
     return ret
 
 if __name__ == "__main__":
@@ -47,14 +48,12 @@ if __name__ == "__main__":
     model.load(dir_model)
     gpt_encoder = get_encoder(dir_model)
     random_prompts = [
-        "holy saint of god",
-        "virtual idols",
+        "holy saint",
         "I am a",
         "Today is"
     ]
     input_prompt = np.random.choice(random_prompts)
     print("generating sentences from `%s`" % input_prompt)
 
-    generated_sentence = generate(gpt_encoder, model, input_prompt, max_length=50)
     print("generated sentences are:")
-    print(generated_sentence)
+    generated_sentence = generate(gpt_encoder, model, input_prompt, max_length=50)
